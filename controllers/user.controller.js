@@ -9,8 +9,8 @@ const adddata=async(req,res)=>{
 }
 const signup=async(req,res)=>{
     let{email}=req.body
-    let emaildata=await user.find({email})
-    if(!email==emaildata){
+    let emaildata=await user.findOne({email:email})
+    if(!emaildata){
         let data= await user.create(req.body)
         res.status(200).send(data)
     }
@@ -20,11 +20,11 @@ const signup=async(req,res)=>{
 }
 const login=async(req,res)=>{
     let{email,password}=req.body
-    let user=await user.findOne({email:email})
-    if(!email==user){
+    let data=await user.findOne({email:email})
+    if(!data){
         res.status(200).send({message:"User not found"})
     }
-    else if(password!=user.password){
+    else if(password!=data.password){
         res.status(200).send({message:"Password is incorrect"})
     }
     else{
