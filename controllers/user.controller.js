@@ -7,6 +7,12 @@ const adddata=async(req,res)=>{
     let data=await user.create(req.body)
     res.status(201).send(data)
 }
+const ui=async(req,res)=>{
+    res.render("index")
+}
+const loginpage=async(req,res)=>{
+    res.render("login")
+}
 const signup=async(req,res)=>{
     let{email}=req.body
     let emaildata=await user.findOne({email:email})
@@ -28,10 +34,8 @@ const login=async(req,res)=>{
         res.status(200).send({message:"Password is incorrect"})
     }
     else{
-        res.status(200).send({message:"Login succesfully"})
+        res.status(200).cookie("id",data.id).send({message:"Login succesfully"})
+        
     }
 }
-const ui=async(req,res)=>{
-    res.render("index")
-}
-module.exports={alldata,adddata,signup,login,ui}
+module.exports={alldata,adddata,signup,login,loginpage,ui}
