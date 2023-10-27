@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #products div {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        border: 2px solid black;
+        padding: 10px;
+        margin: 10px 0;
+    }
+</style>
+
+<body>
+    <form action="/product/create" method="post">
+        <input type="text" name="title" placeholder="title">
+        <input type="url" name="image" placeholder="image">
+        <input type="number" name="price" placeholder="price">
+        <input type="text" name="category" placeholder="category">
+        <input type="submit">
+    </form>
+    <div id="products"></div>
+</body>
+<script>
+    fetch("/product/products")
+        .then((res) => res.json())
+        .then((data) => {
+            data.map((ele) => {
+                let div = document.createElement("div")
+                let h2 = document.createElement("h3")
+                h2.innerHTML = `title : ${ele.title}`
+                let img = document.createElement("img")
+                img.src = ` ${ele.image}`
+                img.setAttribute("width", "200px")
+                img.setAttribute("height", "200px")
+                let h4 = document.createElement("h3")
+                h4.innerHTML = `price : ${ele.price}`
+                let h3 = document.createElement("h4")
+                h3.innerHTML = `category : ${ele.category}`
+                let div2 = document.createElement("h1")
+                let del = document.createElement("button")
+                del.innerHTML = "Delete"
+                del.addEventListener("click", () => {
+                    console.log(ele._id);
+                    fetch(`/product/delete/${ele._id}`, {
+                        method: "DELETE",
+                    });
+                });
+                let upd = document.createElement("button")
+                upd.innerHTML = "Update"
+                div2.append(upd,del)
+                div.append(h2, img, h3, h4, div2)
+                document.getElementById("products").append(div)
+            })
+        })
+</script>
+
+</html>
