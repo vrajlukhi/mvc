@@ -18,5 +18,10 @@ pro_route.delete("/delete/:id",async(req,res)=>{
     let data=await pro.findByIdAndDelete(id)
     res.status(200).send(data)
 })
+pro_route.post("/update",async(req,res)=>{
+    let{_id}=req.body
+    let data=await pro.findByIdAndUpdate(_id,req.body)
+    res.redirect("/product")
+})
 
 module.exports=pro_route

@@ -18,11 +18,21 @@
 
 <body>
     <form action="/product/create" method="post">
-        <input type="text" name="title" placeholder="title">
-        <input type="url" name="image" placeholder="image">
-        <input type="number" name="price" placeholder="price">
-        <input type="text" name="category" placeholder="category">
-        <input type="submit">
+        <input type="text" name="title" placeholder="title" >
+        <input type="url" name="image" placeholder="image" >
+        <input type="number" name="price" placeholder="price" >
+        <input type="text" name="category" placeholder="category" >
+        <input type="submit" >
+    </form>
+
+    <h1>Update form : Click to Update-Button</h1>
+    <form action="/product/Update" method="post">
+        <input type="text" name="title" placeholder="title" id="title">
+        <input type="url" name="image" placeholder="image" id="image">
+        <input type="number" name="price" placeholder="price" id="price">
+        <input type="text" name="category" placeholder="category" id="category">
+        <input type="text" name="_id" placeholder="id" id="id">
+        <input type="submit" id="btn" value="submit">
     </form>
     <div id="products"></div>
 </body>
@@ -53,6 +63,14 @@
                 });
                 let upd = document.createElement("button")
                 upd.innerHTML = "Update"
+                upd.addEventListener("click",()=>{
+                    document.getElementById("title").value=ele.title
+                    document.getElementById("image").value=ele.image
+                    document.getElementById("price").value=ele.price
+                    document.getElementById("category").value=ele.category
+                    document.getElementById("id").value=ele._id
+                    document.getElementById("btn").value = "Update";
+                })
                 div2.append(upd,del)
                 div.append(h2, img, h3, h4, div2)
                 document.getElementById("products").append(div)
