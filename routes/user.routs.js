@@ -1,5 +1,5 @@
 const {Router}=require("express")
-const {alldata, adddata, signup, login, ui, loginpage, signuppage } = require("../controllers/user.controller")
+const {alldata, adddata, signup, login, ui, loginpage, signuppage, reset, resetpass } = require("../controllers/user.controller")
 const check = require("../middlewears/signup")
 const passport = require("passport")
 const { auth } = require("../middlewears/auth")
@@ -15,4 +15,6 @@ router.get("/ui",ui)
 router.get("/user",auth,(req,res)=>{
     res.status(200).send(req.user)
 })
+router.post("/otp",reset)
+router.post("/reset",resetpass)
 module.exports=router

@@ -1,4 +1,14 @@
 const user = require("../models/user.schema")
+const nodemailer=require("nodemailer")
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'vrajlukhi@gmail.com',
+      pass: 'ljck pevu jswp kcht'
+    }
+  })
+ 
 const alldata=async(req,res)=>{
     let data=await user.find()
     res.status(200).send(data)
@@ -41,4 +51,40 @@ const login=async(req,res)=>{
     // }
     return res.status(200).redirect("/user/ui")
 }
-module.exports={alldata,adddata,signup,login,loginpage,signuppage,ui}
+let otp=Math.floor(Math.random()*10000)
+const reset=async(req,res)=>{
+    let{email}=req.body
+    var mailOptions = {
+        from: 'vrajlukhi@gmail.com',
+        to: email,
+        subject: "password reset",
+        html: `<h1>otp:${otp}</h1>`
+      };
+        await transporter.sendMail(mailOptions, (error, info)=>{
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(info);
+        }
+      });
+    res.status(200).send("sending otp")
+}
+const resetpass=async(req,res)=>{
+    let{password,cotp,email}=req.body
+    if(cotp==otp){
+        let userdata=await user.findOne({email:email})
+        if(userdata){
+            userdata.password=password
+            await userdata.save()
+            res.status(200).send("change password")
+        }
+        else{
+            res.status(200).send("user not found")
+        }
+    }
+    else{
+        res.status(200).send("wrong otp")
+    }
+}
+
+module.exports={alldata,adddata,signup,login,loginpage,signuppage,ui,reset,resetpass}
