@@ -1,5 +1,6 @@
 const user = require("../models/user.schema")
 const nodemailer=require("nodemailer")
+const jwt=require("jsonwebtoken")
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -38,18 +39,16 @@ const signup=async(req,res)=>{
     }
 }
 const login=async(req,res)=>{
-    // let{email,password}=req.body
-    // let data=await user.findOne({email:email})
-    // if(!data){
-    //     res.status(200).send({message:"User not found"})
-    // }
-    // else if(password!=data.password){
-    //     res.status(200).send({message:"Password is incorrect"})
-    // }
-    // else{
-    //     res.status(200).cookie("id",data.id).send({message:"Login succesfully"})
-    // }
-    return res.status(200).redirect("/user/ui")
+    let{email,password}=req.body
+    let data=await user.findOne({email:email,password:password})
+    if(data){
+        let token = jwt.sign({ username: data.username }, 'the');
+        res.cookie("token",token).send("done")
+        console.log(token);
+    }
+    else{
+        res.send("first signup")
+    }
 }
 let otp=Math.floor(Math.random()*10000)
 const reset=async(req,res)=>{
@@ -86,5 +85,8 @@ const resetpass=async(req,res)=>{
         res.status(200).send("wrong otp")
     }
 }
-
-module.exports={alldata,adddata,signup,login,loginpage,signuppage,ui,reset,resetpass}
+const data=async(req,res)=>{
+    let data=await user.find()
+    res.send(data)
+}
+module.exports={alldata,adddata,signup,login,loginpage,signuppage,ui,reset,resetpass,data}

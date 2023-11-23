@@ -1,3 +1,4 @@
+const jwt=require("jsonwebtoken")
 const auth=(req,res,next)=>{
     if(req.user){
         next()
@@ -21,4 +22,15 @@ const finduser = async(req ,res, next) =>{
         res.redirect("/login")
     }
 }
-module.exports={auth,finduser}
+const IsAuth = (req, res, next) => {
+    let cookie = req.cookies
+    if (cookie.token) {
+        let decoded = jwt.verify(cookie.token, 'the');
+        console.log(decoded);
+        next()
+    }
+    else{
+        res.send("you are not authorize")
+    }
+}
+module.exports={auth,finduser,IsAuth}
